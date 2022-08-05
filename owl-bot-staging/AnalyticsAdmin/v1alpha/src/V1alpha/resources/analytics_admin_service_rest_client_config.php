@@ -757,6 +757,18 @@ return [
                 'uriTemplate' => '/v1alpha/accounts:provisionAccountTicket',
                 'body' => '*',
             ],
+            'RunAccessReport' => [
+                'method' => 'post',
+                'uriTemplate' => '/v1alpha/{entity=properties/*}:runAccessReport',
+                'body' => '*',
+                'placeholders' => [
+                    'entity' => [
+                        'getters' => [
+                            'getEntity',
+                        ],
+                    ],
+                ],
+            ],
             'SearchChangeHistoryEvents' => [
                 'method' => 'post',
                 'uriTemplate' => '/v1alpha/{account=accounts/*}:searchChangeHistoryEvents',
