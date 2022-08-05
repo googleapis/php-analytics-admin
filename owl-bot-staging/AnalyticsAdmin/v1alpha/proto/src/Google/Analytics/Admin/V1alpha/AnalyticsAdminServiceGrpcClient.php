@@ -1164,4 +1164,111 @@ class AnalyticsAdminServiceGrpcClient extends \Grpc\BaseStub {
         $metadata, $options);
     }
 
+    /**
+     * Lookup for a single Audience.
+     * Audiences created before 2020 may not be supported.
+     * @param \Google\Analytics\Admin\V1alpha\GetAudienceRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function GetAudience(\Google\Analytics\Admin\V1alpha\GetAudienceRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/GetAudience',
+        $argument,
+        ['\Google\Analytics\Admin\V1alpha\Audience', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Lists Audiences on a property.
+     * Audiences created before 2020 may not be supported.
+     * @param \Google\Analytics\Admin\V1alpha\ListAudiencesRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function ListAudiences(\Google\Analytics\Admin\V1alpha\ListAudiencesRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/ListAudiences',
+        $argument,
+        ['\Google\Analytics\Admin\V1alpha\ListAudiencesResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Creates an Audience.
+     * @param \Google\Analytics\Admin\V1alpha\CreateAudienceRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function CreateAudience(\Google\Analytics\Admin\V1alpha\CreateAudienceRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/CreateAudience',
+        $argument,
+        ['\Google\Analytics\Admin\V1alpha\Audience', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Updates an Audience on a property.
+     * @param \Google\Analytics\Admin\V1alpha\UpdateAudienceRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function UpdateAudience(\Google\Analytics\Admin\V1alpha\UpdateAudienceRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/UpdateAudience',
+        $argument,
+        ['\Google\Analytics\Admin\V1alpha\Audience', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Archives an Audience on a property.
+     * @param \Google\Analytics\Admin\V1alpha\ArchiveAudienceRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function ArchiveAudience(\Google\Analytics\Admin\V1alpha\ArchiveAudienceRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/ArchiveAudience',
+        $argument,
+        ['\Google\Protobuf\GPBEmpty', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Lookup for a AttributionSettings singleton.
+     * @param \Google\Analytics\Admin\V1alpha\GetAttributionSettingsRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function GetAttributionSettings(\Google\Analytics\Admin\V1alpha\GetAttributionSettingsRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/GetAttributionSettings',
+        $argument,
+        ['\Google\Analytics\Admin\V1alpha\AttributionSettings', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Updates attribution settings on a property.
+     * @param \Google\Analytics\Admin\V1alpha\UpdateAttributionSettingsRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function UpdateAttributionSettings(\Google\Analytics\Admin\V1alpha\UpdateAttributionSettingsRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/UpdateAttributionSettings',
+        $argument,
+        ['\Google\Analytics\Admin\V1alpha\AttributionSettings', 'decode'],
+        $metadata, $options);
+    }
+
 }

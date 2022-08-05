@@ -32,8 +32,11 @@ use Google\Analytics\Admin\V1alpha\AcknowledgeUserDataCollectionResponse;
 
 use Google\Analytics\Admin\V1alpha\ApproveDisplayVideo360AdvertiserLinkProposalRequest;
 use Google\Analytics\Admin\V1alpha\ApproveDisplayVideo360AdvertiserLinkProposalResponse;
+use Google\Analytics\Admin\V1alpha\ArchiveAudienceRequest;
 use Google\Analytics\Admin\V1alpha\ArchiveCustomDimensionRequest;
 use Google\Analytics\Admin\V1alpha\ArchiveCustomMetricRequest;
+use Google\Analytics\Admin\V1alpha\AttributionSettings;
+use Google\Analytics\Admin\V1alpha\Audience;
 use Google\Analytics\Admin\V1alpha\AuditUserLinksRequest;
 use Google\Analytics\Admin\V1alpha\AuditUserLinksResponse;
 use Google\Analytics\Admin\V1alpha\BatchCreateUserLinksRequest;
@@ -45,6 +48,7 @@ use Google\Analytics\Admin\V1alpha\BatchUpdateUserLinksRequest;
 use Google\Analytics\Admin\V1alpha\BatchUpdateUserLinksResponse;
 use Google\Analytics\Admin\V1alpha\CancelDisplayVideo360AdvertiserLinkProposalRequest;
 use Google\Analytics\Admin\V1alpha\ConversionEvent;
+use Google\Analytics\Admin\V1alpha\CreateAudienceRequest;
 use Google\Analytics\Admin\V1alpha\CreateConversionEventRequest;
 use Google\Analytics\Admin\V1alpha\CreateCustomDimensionRequest;
 use Google\Analytics\Admin\V1alpha\CreateCustomMetricRequest;
@@ -75,6 +79,8 @@ use Google\Analytics\Admin\V1alpha\DisplayVideo360AdvertiserLink;
 use Google\Analytics\Admin\V1alpha\DisplayVideo360AdvertiserLinkProposal;
 use Google\Analytics\Admin\V1alpha\FirebaseLink;
 use Google\Analytics\Admin\V1alpha\GetAccountRequest;
+use Google\Analytics\Admin\V1alpha\GetAttributionSettingsRequest;
+use Google\Analytics\Admin\V1alpha\GetAudienceRequest;
 use Google\Analytics\Admin\V1alpha\GetConversionEventRequest;
 use Google\Analytics\Admin\V1alpha\GetCustomDimensionRequest;
 use Google\Analytics\Admin\V1alpha\GetCustomMetricRequest;
@@ -90,12 +96,14 @@ use Google\Analytics\Admin\V1alpha\GetPropertyRequest;
 use Google\Analytics\Admin\V1alpha\GetUserLinkRequest;
 use Google\Analytics\Admin\V1alpha\GlobalSiteTag;
 use Google\Analytics\Admin\V1alpha\GoogleAdsLink;
-use Google\Analytics\Admin\V1alpha\GoogleSignalsSettings;
 
+use Google\Analytics\Admin\V1alpha\GoogleSignalsSettings;
 use Google\Analytics\Admin\V1alpha\ListAccountsRequest;
 use Google\Analytics\Admin\V1alpha\ListAccountsResponse;
 use Google\Analytics\Admin\V1alpha\ListAccountSummariesRequest;
 use Google\Analytics\Admin\V1alpha\ListAccountSummariesResponse;
+use Google\Analytics\Admin\V1alpha\ListAudiencesRequest;
+use Google\Analytics\Admin\V1alpha\ListAudiencesResponse;
 use Google\Analytics\Admin\V1alpha\ListConversionEventsRequest;
 use Google\Analytics\Admin\V1alpha\ListConversionEventsResponse;
 use Google\Analytics\Admin\V1alpha\ListCustomDimensionsRequest;
@@ -125,6 +133,8 @@ use Google\Analytics\Admin\V1alpha\ProvisionAccountTicketResponse;
 use Google\Analytics\Admin\V1alpha\SearchChangeHistoryEventsRequest;
 use Google\Analytics\Admin\V1alpha\SearchChangeHistoryEventsResponse;
 use Google\Analytics\Admin\V1alpha\UpdateAccountRequest;
+use Google\Analytics\Admin\V1alpha\UpdateAttributionSettingsRequest;
+use Google\Analytics\Admin\V1alpha\UpdateAudienceRequest;
 use Google\Analytics\Admin\V1alpha\UpdateCustomDimensionRequest;
 use Google\Analytics\Admin\V1alpha\UpdateCustomMetricRequest;
 use Google\Analytics\Admin\V1alpha\UpdateDataRetentionSettingsRequest;
@@ -211,6 +221,10 @@ class AnalyticsAdminServiceGapicClient
 
     private static $accountUserLinkNameTemplate;
 
+    private static $attributionSettingsNameTemplate;
+
+    private static $audienceNameTemplate;
+
     private static $conversionEventNameTemplate;
 
     private static $customDimensionNameTemplate;
@@ -280,6 +294,24 @@ class AnalyticsAdminServiceGapicClient
         }
 
         return self::$accountUserLinkNameTemplate;
+    }
+
+    private static function getAttributionSettingsNameTemplate()
+    {
+        if (self::$attributionSettingsNameTemplate == null) {
+            self::$attributionSettingsNameTemplate = new PathTemplate('properties/{property}/attributionSettings');
+        }
+
+        return self::$attributionSettingsNameTemplate;
+    }
+
+    private static function getAudienceNameTemplate()
+    {
+        if (self::$audienceNameTemplate == null) {
+            self::$audienceNameTemplate = new PathTemplate('properties/{property}/audiences/{audience}');
+        }
+
+        return self::$audienceNameTemplate;
     }
 
     private static function getConversionEventNameTemplate()
@@ -432,6 +464,8 @@ class AnalyticsAdminServiceGapicClient
             self::$pathTemplateMap = [
                 'account' => self::getAccountNameTemplate(),
                 'accountUserLink' => self::getAccountUserLinkNameTemplate(),
+                'attributionSettings' => self::getAttributionSettingsNameTemplate(),
+                'audience' => self::getAudienceNameTemplate(),
                 'conversionEvent' => self::getConversionEventNameTemplate(),
                 'customDimension' => self::getCustomDimensionNameTemplate(),
                 'customMetric' => self::getCustomMetricNameTemplate(),
@@ -487,6 +521,42 @@ class AnalyticsAdminServiceGapicClient
         return self::getAccountUserLinkNameTemplate()->render([
             'account' => $account,
             'user_link' => $userLink,
+        ]);
+    }
+
+    /**
+     * Formats a string containing the fully-qualified path to represent a
+     * attribution_settings resource.
+     *
+     * @param string $property
+     *
+     * @return string The formatted attribution_settings resource.
+     *
+     * @experimental
+     */
+    public static function attributionSettingsName($property)
+    {
+        return self::getAttributionSettingsNameTemplate()->render([
+            'property' => $property,
+        ]);
+    }
+
+    /**
+     * Formats a string containing the fully-qualified path to represent a audience
+     * resource.
+     *
+     * @param string $property
+     * @param string $audience
+     *
+     * @return string The formatted audience resource.
+     *
+     * @experimental
+     */
+    public static function audienceName($property, $audience)
+    {
+        return self::getAudienceNameTemplate()->render([
+            'property' => $property,
+            'audience' => $audience,
         ]);
     }
 
@@ -794,6 +864,8 @@ class AnalyticsAdminServiceGapicClient
      * Template: Pattern
      * - account: accounts/{account}
      * - accountUserLink: accounts/{account}/userLinks/{user_link}
+     * - attributionSettings: properties/{property}/attributionSettings
+     * - audience: properties/{property}/audiences/{audience}
      * - conversionEvent: properties/{property}/conversionEvents/{conversion_event}
      * - customDimension: properties/{property}/customDimensions/{custom_dimension}
      * - customMetric: properties/{property}/customMetrics/{custom_metric}
@@ -1006,6 +1078,45 @@ class AnalyticsAdminServiceGapicClient
         $requestParams = new RequestParamsHeaderDescriptor($requestParamHeaders);
         $optionalArgs['headers'] = isset($optionalArgs['headers']) ? array_merge($requestParams->getHeader(), $optionalArgs['headers']) : $requestParams->getHeader();
         return $this->startCall('ApproveDisplayVideo360AdvertiserLinkProposal', ApproveDisplayVideo360AdvertiserLinkProposalResponse::class, $optionalArgs, $request)->wait();
+    }
+
+    /**
+     * Archives an Audience on a property.
+     *
+     * Sample code:
+     * ```
+     * $analyticsAdminServiceClient = new AnalyticsAdminServiceClient();
+     * try {
+     *     $formattedName = $analyticsAdminServiceClient->propertyName('[PROPERTY]');
+     *     $analyticsAdminServiceClient->archiveAudience($formattedName);
+     * } finally {
+     *     $analyticsAdminServiceClient->close();
+     * }
+     * ```
+     *
+     * @param string $name         Required. Example format: properties/1234/audiences/5678
+     * @param array  $optionalArgs {
+     *     Optional.
+     *
+     *     @type RetrySettings|array $retrySettings
+     *           Retry settings to use for this call. Can be a {@see RetrySettings} object, or an
+     *           associative array of retry settings parameters. See the documentation on
+     *           {@see RetrySettings} for example usage.
+     * }
+     *
+     * @throws ApiException if the remote call fails
+     *
+     * @experimental
+     */
+    public function archiveAudience($name, array $optionalArgs = [])
+    {
+        $request = new ArchiveAudienceRequest();
+        $requestParamHeaders = [];
+        $request->setName($name);
+        $requestParamHeaders['name'] = $name;
+        $requestParams = new RequestParamsHeaderDescriptor($requestParamHeaders);
+        $optionalArgs['headers'] = isset($optionalArgs['headers']) ? array_merge($requestParams->getHeader(), $optionalArgs['headers']) : $requestParams->getHeader();
+        return $this->startCall('ArchiveAudience', GPBEmpty::class, $optionalArgs, $request)->wait();
     }
 
     /**
@@ -1414,6 +1525,50 @@ class AnalyticsAdminServiceGapicClient
         $requestParams = new RequestParamsHeaderDescriptor($requestParamHeaders);
         $optionalArgs['headers'] = isset($optionalArgs['headers']) ? array_merge($requestParams->getHeader(), $optionalArgs['headers']) : $requestParams->getHeader();
         return $this->startCall('CancelDisplayVideo360AdvertiserLinkProposal', DisplayVideo360AdvertiserLinkProposal::class, $optionalArgs, $request)->wait();
+    }
+
+    /**
+     * Creates an Audience.
+     *
+     * Sample code:
+     * ```
+     * $analyticsAdminServiceClient = new AnalyticsAdminServiceClient();
+     * try {
+     *     $formattedParent = $analyticsAdminServiceClient->propertyName('[PROPERTY]');
+     *     $audience = new Audience();
+     *     $response = $analyticsAdminServiceClient->createAudience($formattedParent, $audience);
+     * } finally {
+     *     $analyticsAdminServiceClient->close();
+     * }
+     * ```
+     *
+     * @param string   $parent       Required. Example format: properties/1234
+     * @param Audience $audience     Required. The audience to create.
+     * @param array    $optionalArgs {
+     *     Optional.
+     *
+     *     @type RetrySettings|array $retrySettings
+     *           Retry settings to use for this call. Can be a {@see RetrySettings} object, or an
+     *           associative array of retry settings parameters. See the documentation on
+     *           {@see RetrySettings} for example usage.
+     * }
+     *
+     * @return \Google\Analytics\Admin\V1alpha\Audience
+     *
+     * @throws ApiException if the remote call fails
+     *
+     * @experimental
+     */
+    public function createAudience($parent, $audience, array $optionalArgs = [])
+    {
+        $request = new CreateAudienceRequest();
+        $requestParamHeaders = [];
+        $request->setParent($parent);
+        $request->setAudience($audience);
+        $requestParamHeaders['parent'] = $parent;
+        $requestParams = new RequestParamsHeaderDescriptor($requestParamHeaders);
+        $optionalArgs['headers'] = isset($optionalArgs['headers']) ? array_merge($requestParams->getHeader(), $optionalArgs['headers']) : $requestParams->getHeader();
+        return $this->startCall('CreateAudience', Audience::class, $optionalArgs, $request)->wait();
     }
 
     /**
@@ -2383,6 +2538,91 @@ class AnalyticsAdminServiceGapicClient
     }
 
     /**
+     * Lookup for a AttributionSettings singleton.
+     *
+     * Sample code:
+     * ```
+     * $analyticsAdminServiceClient = new AnalyticsAdminServiceClient();
+     * try {
+     *     $formattedName = $analyticsAdminServiceClient->attributionSettingsName('[PROPERTY]');
+     *     $response = $analyticsAdminServiceClient->getAttributionSettings($formattedName);
+     * } finally {
+     *     $analyticsAdminServiceClient->close();
+     * }
+     * ```
+     *
+     * @param string $name         Required. The name of the attribution settings to retrieve.
+     *                             Format: properties/{property}/attributionSettings
+     * @param array  $optionalArgs {
+     *     Optional.
+     *
+     *     @type RetrySettings|array $retrySettings
+     *           Retry settings to use for this call. Can be a {@see RetrySettings} object, or an
+     *           associative array of retry settings parameters. See the documentation on
+     *           {@see RetrySettings} for example usage.
+     * }
+     *
+     * @return \Google\Analytics\Admin\V1alpha\AttributionSettings
+     *
+     * @throws ApiException if the remote call fails
+     *
+     * @experimental
+     */
+    public function getAttributionSettings($name, array $optionalArgs = [])
+    {
+        $request = new GetAttributionSettingsRequest();
+        $requestParamHeaders = [];
+        $request->setName($name);
+        $requestParamHeaders['name'] = $name;
+        $requestParams = new RequestParamsHeaderDescriptor($requestParamHeaders);
+        $optionalArgs['headers'] = isset($optionalArgs['headers']) ? array_merge($requestParams->getHeader(), $optionalArgs['headers']) : $requestParams->getHeader();
+        return $this->startCall('GetAttributionSettings', AttributionSettings::class, $optionalArgs, $request)->wait();
+    }
+
+    /**
+     * Lookup for a single Audience.
+     * Audiences created before 2020 may not be supported.
+     *
+     * Sample code:
+     * ```
+     * $analyticsAdminServiceClient = new AnalyticsAdminServiceClient();
+     * try {
+     *     $formattedName = $analyticsAdminServiceClient->audienceName('[PROPERTY]', '[AUDIENCE]');
+     *     $response = $analyticsAdminServiceClient->getAudience($formattedName);
+     * } finally {
+     *     $analyticsAdminServiceClient->close();
+     * }
+     * ```
+     *
+     * @param string $name         Required. The name of the Audience to get.
+     *                             Example format: properties/1234/audiences/5678
+     * @param array  $optionalArgs {
+     *     Optional.
+     *
+     *     @type RetrySettings|array $retrySettings
+     *           Retry settings to use for this call. Can be a {@see RetrySettings} object, or an
+     *           associative array of retry settings parameters. See the documentation on
+     *           {@see RetrySettings} for example usage.
+     * }
+     *
+     * @return \Google\Analytics\Admin\V1alpha\Audience
+     *
+     * @throws ApiException if the remote call fails
+     *
+     * @experimental
+     */
+    public function getAudience($name, array $optionalArgs = [])
+    {
+        $request = new GetAudienceRequest();
+        $requestParamHeaders = [];
+        $request->setName($name);
+        $requestParamHeaders['name'] = $name;
+        $requestParams = new RequestParamsHeaderDescriptor($requestParamHeaders);
+        $optionalArgs['headers'] = isset($optionalArgs['headers']) ? array_merge($requestParams->getHeader(), $optionalArgs['headers']) : $requestParams->getHeader();
+        return $this->startCall('GetAudience', Audience::class, $optionalArgs, $request)->wait();
+    }
+
+    /**
      * Retrieve a single conversion event.
      *
      * Sample code:
@@ -3073,6 +3313,77 @@ class AnalyticsAdminServiceGapicClient
         }
 
         return $this->getPagedListResponse('ListAccounts', $optionalArgs, ListAccountsResponse::class, $request);
+    }
+
+    /**
+     * Lists Audiences on a property.
+     * Audiences created before 2020 may not be supported.
+     *
+     * Sample code:
+     * ```
+     * $analyticsAdminServiceClient = new AnalyticsAdminServiceClient();
+     * try {
+     *     $formattedParent = $analyticsAdminServiceClient->propertyName('[PROPERTY]');
+     *     // Iterate over pages of elements
+     *     $pagedResponse = $analyticsAdminServiceClient->listAudiences($formattedParent);
+     *     foreach ($pagedResponse->iteratePages() as $page) {
+     *         foreach ($page as $element) {
+     *             // doSomethingWith($element);
+     *         }
+     *     }
+     *     // Alternatively:
+     *     // Iterate through all elements
+     *     $pagedResponse = $analyticsAdminServiceClient->listAudiences($formattedParent);
+     *     foreach ($pagedResponse->iterateAllElements() as $element) {
+     *         // doSomethingWith($element);
+     *     }
+     * } finally {
+     *     $analyticsAdminServiceClient->close();
+     * }
+     * ```
+     *
+     * @param string $parent       Required. Example format: properties/1234
+     * @param array  $optionalArgs {
+     *     Optional.
+     *
+     *     @type int $pageSize
+     *           The maximum number of resources contained in the underlying API
+     *           response. The API may return fewer values in a page, even if
+     *           there are additional values to be retrieved.
+     *     @type string $pageToken
+     *           A page token is used to specify a page of values to be returned.
+     *           If no page token is specified (the default), the first page
+     *           of values will be returned. Any page token used here must have
+     *           been generated by a previous call to the API.
+     *     @type RetrySettings|array $retrySettings
+     *           Retry settings to use for this call. Can be a {@see RetrySettings} object, or an
+     *           associative array of retry settings parameters. See the documentation on
+     *           {@see RetrySettings} for example usage.
+     * }
+     *
+     * @return \Google\ApiCore\PagedListResponse
+     *
+     * @throws ApiException if the remote call fails
+     *
+     * @experimental
+     */
+    public function listAudiences($parent, array $optionalArgs = [])
+    {
+        $request = new ListAudiencesRequest();
+        $requestParamHeaders = [];
+        $request->setParent($parent);
+        $requestParamHeaders['parent'] = $parent;
+        if (isset($optionalArgs['pageSize'])) {
+            $request->setPageSize($optionalArgs['pageSize']);
+        }
+
+        if (isset($optionalArgs['pageToken'])) {
+            $request->setPageToken($optionalArgs['pageToken']);
+        }
+
+        $requestParams = new RequestParamsHeaderDescriptor($requestParamHeaders);
+        $optionalArgs['headers'] = isset($optionalArgs['headers']) ? array_merge($requestParams->getHeader(), $optionalArgs['headers']) : $requestParams->getHeader();
+        return $this->getPagedListResponse('ListAudiences', $optionalArgs, ListAudiencesResponse::class, $request);
     }
 
     /**
@@ -4081,6 +4392,100 @@ class AnalyticsAdminServiceGapicClient
         $requestParams = new RequestParamsHeaderDescriptor($requestParamHeaders);
         $optionalArgs['headers'] = isset($optionalArgs['headers']) ? array_merge($requestParams->getHeader(), $optionalArgs['headers']) : $requestParams->getHeader();
         return $this->startCall('UpdateAccount', Account::class, $optionalArgs, $request)->wait();
+    }
+
+    /**
+     * Updates attribution settings on a property.
+     *
+     * Sample code:
+     * ```
+     * $analyticsAdminServiceClient = new AnalyticsAdminServiceClient();
+     * try {
+     *     $attributionSettings = new AttributionSettings();
+     *     $updateMask = new FieldMask();
+     *     $response = $analyticsAdminServiceClient->updateAttributionSettings($attributionSettings, $updateMask);
+     * } finally {
+     *     $analyticsAdminServiceClient->close();
+     * }
+     * ```
+     *
+     * @param AttributionSettings $attributionSettings Required. The attribution settings to update.
+     *                                                 The `name` field is used to identify the settings to be updated.
+     * @param FieldMask           $updateMask          Required. The list of fields to be updated. Field names must be in snake case
+     *                                                 (e.g., "field_to_update"). Omitted fields will not be updated. To replace
+     *                                                 the entire entity, use one path with the string "*" to match all fields.
+     * @param array               $optionalArgs        {
+     *     Optional.
+     *
+     *     @type RetrySettings|array $retrySettings
+     *           Retry settings to use for this call. Can be a {@see RetrySettings} object, or an
+     *           associative array of retry settings parameters. See the documentation on
+     *           {@see RetrySettings} for example usage.
+     * }
+     *
+     * @return \Google\Analytics\Admin\V1alpha\AttributionSettings
+     *
+     * @throws ApiException if the remote call fails
+     *
+     * @experimental
+     */
+    public function updateAttributionSettings($attributionSettings, $updateMask, array $optionalArgs = [])
+    {
+        $request = new UpdateAttributionSettingsRequest();
+        $requestParamHeaders = [];
+        $request->setAttributionSettings($attributionSettings);
+        $request->setUpdateMask($updateMask);
+        $requestParamHeaders['attribution_settings.name'] = $attributionSettings->getName();
+        $requestParams = new RequestParamsHeaderDescriptor($requestParamHeaders);
+        $optionalArgs['headers'] = isset($optionalArgs['headers']) ? array_merge($requestParams->getHeader(), $optionalArgs['headers']) : $requestParams->getHeader();
+        return $this->startCall('UpdateAttributionSettings', AttributionSettings::class, $optionalArgs, $request)->wait();
+    }
+
+    /**
+     * Updates an Audience on a property.
+     *
+     * Sample code:
+     * ```
+     * $analyticsAdminServiceClient = new AnalyticsAdminServiceClient();
+     * try {
+     *     $audience = new Audience();
+     *     $updateMask = new FieldMask();
+     *     $response = $analyticsAdminServiceClient->updateAudience($audience, $updateMask);
+     * } finally {
+     *     $analyticsAdminServiceClient->close();
+     * }
+     * ```
+     *
+     * @param Audience  $audience     Required. The audience to update.
+     *                                The audience's `name` field is used to identify the audience to be updated.
+     * @param FieldMask $updateMask   Required. The list of fields to be updated. Field names must be in snake case
+     *                                (e.g., "field_to_update"). Omitted fields will not be updated. To replace
+     *                                the entire entity, use one path with the string "*" to match all fields.
+     * @param array     $optionalArgs {
+     *     Optional.
+     *
+     *     @type RetrySettings|array $retrySettings
+     *           Retry settings to use for this call. Can be a {@see RetrySettings} object, or an
+     *           associative array of retry settings parameters. See the documentation on
+     *           {@see RetrySettings} for example usage.
+     * }
+     *
+     * @return \Google\Analytics\Admin\V1alpha\Audience
+     *
+     * @throws ApiException if the remote call fails
+     *
+     * @experimental
+     */
+    public function updateAudience($audience, $updateMask, array $optionalArgs = [])
+    {
+        $request = new UpdateAudienceRequest();
+        $requestParamHeaders = [];
+        $request->setAudience($audience);
+        $request->setUpdateMask($updateMask);
+        $requestParamHeaders['audience.name'] = $audience->getName();
+        $requestParams = new RequestParamsHeaderDescriptor($requestParamHeaders);
+        $optionalArgs['headers'] = isset($optionalArgs['headers']) ? array_merge($requestParams->getHeader(), $optionalArgs['headers']) : $requestParams->getHeader();
+        return $this->startCall('UpdateAudience', Audience::class, $optionalArgs, $request)->wait();
     }
 
     /**
