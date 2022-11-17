@@ -22,10 +22,10 @@
 
 namespace Google\Analytics\Admin\Tests\Unit\V1alpha;
 
-use Google\Analytics\Admin\V1alpha\AnalyticsAdminServiceClient;
 use Google\Analytics\Admin\V1alpha\Account;
 use Google\Analytics\Admin\V1alpha\AccountSummary;
 use Google\Analytics\Admin\V1alpha\AcknowledgeUserDataCollectionResponse;
+use Google\Analytics\Admin\V1alpha\AnalyticsAdminServiceClient;
 use Google\Analytics\Admin\V1alpha\ApproveDisplayVideo360AdvertiserLinkProposalResponse;
 use Google\Analytics\Admin\V1alpha\AttributionSettings;
 use Google\Analytics\Admin\V1alpha\AttributionSettings\AcquisitionConversionEventLookbackWindow;
