@@ -35,34 +35,32 @@ use Google\ApiCore\ApiException;
  * This method is transactional. If any UserLink cannot be created, none of
  * the UserLinks will be created.
  *
- * @param string $formattedParent The account or property that all user links in the request are for.
- *                                This field is required. The parent field in the CreateUserLinkRequest
- *                                messages must either be empty or match this field.
- *                                Example format: accounts/1234
- *                                Please see {@see AnalyticsAdminServiceClient::accountName()} for help formatting this field.
- * @param string $formattedParent Example format: accounts/1234
- *                                Please see {@see AnalyticsAdminServiceClient::accountName()} for help formatting this field.
+ * @param string $formattedParent         The account or property that all user links in the request are for.
+ *                                        This field is required. The parent field in the CreateUserLinkRequest
+ *                                        messages must either be empty or match this field.
+ *                                        Example format: accounts/1234
+ *                                        Please see {@see AnalyticsAdminServiceClient::accountName()} for help formatting this field.
+ * @param string $formattedRequestsParent Example format: accounts/1234
+ *                                        Please see {@see AnalyticsAdminServiceClient::accountName()} for help formatting this field.
  */
-function batch_create_user_links_sample(string $formattedParent, string $formattedParent): void
-{
+function batch_create_user_links_sample(
+    string $formattedParent,
+    string $formattedRequestsParent
+): void {
     // Create a client.
     $analyticsAdminServiceClient = new AnalyticsAdminServiceClient();
 
     // Prepare any non-scalar elements to be passed along with the request.
     $requestsUserLink = new UserLink();
     $createUserLinkRequest = (new CreateUserLinkRequest())
-        ->setParent($requestsParent)
+        ->setParent($formattedRequestsParent)
         ->setUserLink($requestsUserLink);
     $requests = [$createUserLinkRequest,];
 
     // Call the API and handle any network failures.
     try {
         /** @var BatchCreateUserLinksResponse $response */
-        $response = $analyticsAdminServiceClient->batchCreateUserLinks(
-            $formattedParent,
-            $requests,
-            $formattedParent
-        );
+        $response = $analyticsAdminServiceClient->batchCreateUserLinks($formattedParent, $requests);
         printf('Response data: %s' . PHP_EOL, $response->serializeToJsonString());
     } catch (ApiException $ex) {
         printf('Call failed with message: %s' . PHP_EOL, $ex->getMessage());
@@ -81,8 +79,8 @@ function batch_create_user_links_sample(string $formattedParent, string $formatt
 function callSample(): void
 {
     $formattedParent = AnalyticsAdminServiceClient::accountName('[ACCOUNT]');
-    $formattedParent = AnalyticsAdminServiceClient::accountName('[ACCOUNT]');
+    $formattedRequestsParent = AnalyticsAdminServiceClient::accountName('[ACCOUNT]');
 
-    batch_create_user_links_sample($formattedParent, $formattedParent);
+    batch_create_user_links_sample($formattedParent, $formattedRequestsParent);
 }
 // [END analyticsadmin_v1alpha_generated_AnalyticsAdminService_BatchCreateUserLinks_sync]
