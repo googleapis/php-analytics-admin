@@ -22,40 +22,38 @@
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
-// [START analyticsadmin_v1alpha_generated_AnalyticsAdminService_BatchUpdateAccessBindings_sync]
-use Google\Analytics\Admin\V1alpha\AccessBinding;
+// [START analyticsadmin_v1alpha_generated_AnalyticsAdminService_UpdateEnhancedMeasurementSettings_sync]
 use Google\Analytics\Admin\V1alpha\AnalyticsAdminServiceClient;
-use Google\Analytics\Admin\V1alpha\BatchUpdateAccessBindingsResponse;
-use Google\Analytics\Admin\V1alpha\UpdateAccessBindingRequest;
+use Google\Analytics\Admin\V1alpha\EnhancedMeasurementSettings;
 use Google\ApiCore\ApiException;
+use Google\Protobuf\FieldMask;
 
 /**
- * Updates information about multiple access bindings to an account or
- * property.
+ * Updates the enhanced measurement settings for this data stream.
+ * Note that the stream must enable enhanced measurement for these settings to
+ * take effect.
  *
- * @param string $formattedParent The account or property that owns the access bindings. The parent
- *                                of all provided AccessBinding in UpdateAccessBindingRequest messages must
- *                                match this field.
- *                                Formats:
- *                                - accounts/{account}
- *                                - properties/{property}
- *                                Please see {@see AnalyticsAdminServiceClient::accountName()} for help formatting this field.
+ * @param string $enhancedMeasurementSettingsSearchQueryParameter URL query parameters to interpret as site search parameters.
+ *                                                                Max length is 1024 characters. Must not be empty.
  */
-function batch_update_access_bindings_sample(string $formattedParent): void
-{
+function update_enhanced_measurement_settings_sample(
+    string $enhancedMeasurementSettingsSearchQueryParameter
+): void {
     // Create a client.
     $analyticsAdminServiceClient = new AnalyticsAdminServiceClient();
 
     // Prepare any non-scalar elements to be passed along with the request.
-    $requestsAccessBinding = new AccessBinding();
-    $updateAccessBindingRequest = (new UpdateAccessBindingRequest())
-        ->setAccessBinding($requestsAccessBinding);
-    $requests = [$updateAccessBindingRequest,];
+    $enhancedMeasurementSettings = (new EnhancedMeasurementSettings())
+        ->setSearchQueryParameter($enhancedMeasurementSettingsSearchQueryParameter);
+    $updateMask = new FieldMask();
 
     // Call the API and handle any network failures.
     try {
-        /** @var BatchUpdateAccessBindingsResponse $response */
-        $response = $analyticsAdminServiceClient->batchUpdateAccessBindings($formattedParent, $requests);
+        /** @var EnhancedMeasurementSettings $response */
+        $response = $analyticsAdminServiceClient->updateEnhancedMeasurementSettings(
+            $enhancedMeasurementSettings,
+            $updateMask
+        );
         printf('Response data: %s' . PHP_EOL, $response->serializeToJsonString());
     } catch (ApiException $ex) {
         printf('Call failed with message: %s' . PHP_EOL, $ex->getMessage());
@@ -73,8 +71,8 @@ function batch_update_access_bindings_sample(string $formattedParent): void
  */
 function callSample(): void
 {
-    $formattedParent = AnalyticsAdminServiceClient::accountName('[ACCOUNT]');
+    $enhancedMeasurementSettingsSearchQueryParameter = '[SEARCH_QUERY_PARAMETER]';
 
-    batch_update_access_bindings_sample($formattedParent);
+    update_enhanced_measurement_settings_sample($enhancedMeasurementSettingsSearchQueryParameter);
 }
-// [END analyticsadmin_v1alpha_generated_AnalyticsAdminService_BatchUpdateAccessBindings_sync]
+// [END analyticsadmin_v1alpha_generated_AnalyticsAdminService_UpdateEnhancedMeasurementSettings_sync]

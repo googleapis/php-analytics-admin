@@ -2,7 +2,7 @@
 // GENERATED CODE -- DO NOT EDIT!
 
 // Original file comments:
-// Copyright 2022 Google LLC
+// Copyright 2023 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1652,6 +1652,90 @@ class AnalyticsAdminServiceGrpcClient extends \Grpc\BaseStub {
         return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/ListBigQueryLinks',
         $argument,
         ['\Google\Analytics\Admin\V1alpha\ListBigQueryLinksResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Returns the enhanced measurement settings for this data stream.
+     * Note that the stream must enable enhanced measurement for these settings to
+     * take effect.
+     * @param \Google\Analytics\Admin\V1alpha\GetEnhancedMeasurementSettingsRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function GetEnhancedMeasurementSettings(\Google\Analytics\Admin\V1alpha\GetEnhancedMeasurementSettingsRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/GetEnhancedMeasurementSettings',
+        $argument,
+        ['\Google\Analytics\Admin\V1alpha\EnhancedMeasurementSettings', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Updates the enhanced measurement settings for this data stream.
+     * Note that the stream must enable enhanced measurement for these settings to
+     * take effect.
+     * @param \Google\Analytics\Admin\V1alpha\UpdateEnhancedMeasurementSettingsRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function UpdateEnhancedMeasurementSettings(\Google\Analytics\Admin\V1alpha\UpdateEnhancedMeasurementSettingsRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/UpdateEnhancedMeasurementSettings',
+        $argument,
+        ['\Google\Analytics\Admin\V1alpha\EnhancedMeasurementSettings', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Creates a connected site tag for a Universal Analytics property. You can
+     * create a maximum of 20 connected site tags per property.
+     * Note: This API cannot be used on GA4 properties.
+     * @param \Google\Analytics\Admin\V1alpha\CreateConnectedSiteTagRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function CreateConnectedSiteTag(\Google\Analytics\Admin\V1alpha\CreateConnectedSiteTagRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/CreateConnectedSiteTag',
+        $argument,
+        ['\Google\Analytics\Admin\V1alpha\CreateConnectedSiteTagResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Deletes a connected site tag for a Universal Analytics property.
+     * Note: this has no effect on GA4 properties.
+     * @param \Google\Analytics\Admin\V1alpha\DeleteConnectedSiteTagRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function DeleteConnectedSiteTag(\Google\Analytics\Admin\V1alpha\DeleteConnectedSiteTagRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/DeleteConnectedSiteTag',
+        $argument,
+        ['\Google\Protobuf\GPBEmpty', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Lists the connected site tags for a Universal Analytics property. A maximum
+     * of 20 connected site tags will be returned. Note: this has no effect on GA4
+     * property.
+     * @param \Google\Analytics\Admin\V1alpha\ListConnectedSiteTagsRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function ListConnectedSiteTags(\Google\Analytics\Admin\V1alpha\ListConnectedSiteTagsRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/google.analytics.admin.v1alpha.AnalyticsAdminService/ListConnectedSiteTags',
+        $argument,
+        ['\Google\Analytics\Admin\V1alpha\ListConnectedSiteTagsResponse', 'decode'],
         $metadata, $options);
     }
 

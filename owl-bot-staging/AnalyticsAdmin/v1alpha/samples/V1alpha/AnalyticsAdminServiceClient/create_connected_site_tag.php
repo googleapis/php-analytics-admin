@@ -22,40 +22,38 @@
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
-// [START analyticsadmin_v1alpha_generated_AnalyticsAdminService_BatchUpdateAccessBindings_sync]
-use Google\Analytics\Admin\V1alpha\AccessBinding;
+// [START analyticsadmin_v1alpha_generated_AnalyticsAdminService_CreateConnectedSiteTag_sync]
 use Google\Analytics\Admin\V1alpha\AnalyticsAdminServiceClient;
-use Google\Analytics\Admin\V1alpha\BatchUpdateAccessBindingsResponse;
-use Google\Analytics\Admin\V1alpha\UpdateAccessBindingRequest;
+use Google\Analytics\Admin\V1alpha\ConnectedSiteTag;
+use Google\Analytics\Admin\V1alpha\CreateConnectedSiteTagResponse;
 use Google\ApiCore\ApiException;
 
 /**
- * Updates information about multiple access bindings to an account or
- * property.
+ * Creates a connected site tag for a Universal Analytics property. You can
+ * create a maximum of 20 connected site tags per property.
+ * Note: This API cannot be used on GA4 properties.
  *
- * @param string $formattedParent The account or property that owns the access bindings. The parent
- *                                of all provided AccessBinding in UpdateAccessBindingRequest messages must
- *                                match this field.
- *                                Formats:
- *                                - accounts/{account}
- *                                - properties/{property}
- *                                Please see {@see AnalyticsAdminServiceClient::accountName()} for help formatting this field.
+ * @param string $connectedSiteTagDisplayName User-provided display name for the connected site tag. Must be
+ *                                            less than 256 characters.
+ * @param string $connectedSiteTagTagId       "Tag ID to forward events to. Also known as the Measurement ID,
+ *                                            or the "G-ID"  (For example: G-12345).
  */
-function batch_update_access_bindings_sample(string $formattedParent): void
-{
+function create_connected_site_tag_sample(
+    string $connectedSiteTagDisplayName,
+    string $connectedSiteTagTagId
+): void {
     // Create a client.
     $analyticsAdminServiceClient = new AnalyticsAdminServiceClient();
 
     // Prepare any non-scalar elements to be passed along with the request.
-    $requestsAccessBinding = new AccessBinding();
-    $updateAccessBindingRequest = (new UpdateAccessBindingRequest())
-        ->setAccessBinding($requestsAccessBinding);
-    $requests = [$updateAccessBindingRequest,];
+    $connectedSiteTag = (new ConnectedSiteTag())
+        ->setDisplayName($connectedSiteTagDisplayName)
+        ->setTagId($connectedSiteTagTagId);
 
     // Call the API and handle any network failures.
     try {
-        /** @var BatchUpdateAccessBindingsResponse $response */
-        $response = $analyticsAdminServiceClient->batchUpdateAccessBindings($formattedParent, $requests);
+        /** @var CreateConnectedSiteTagResponse $response */
+        $response = $analyticsAdminServiceClient->createConnectedSiteTag($connectedSiteTag);
         printf('Response data: %s' . PHP_EOL, $response->serializeToJsonString());
     } catch (ApiException $ex) {
         printf('Call failed with message: %s' . PHP_EOL, $ex->getMessage());
@@ -73,8 +71,9 @@ function batch_update_access_bindings_sample(string $formattedParent): void
  */
 function callSample(): void
 {
-    $formattedParent = AnalyticsAdminServiceClient::accountName('[ACCOUNT]');
+    $connectedSiteTagDisplayName = '[DISPLAY_NAME]';
+    $connectedSiteTagTagId = '[TAG_ID]';
 
-    batch_update_access_bindings_sample($formattedParent);
+    create_connected_site_tag_sample($connectedSiteTagDisplayName, $connectedSiteTagTagId);
 }
-// [END analyticsadmin_v1alpha_generated_AnalyticsAdminService_BatchUpdateAccessBindings_sync]
+// [END analyticsadmin_v1alpha_generated_AnalyticsAdminService_CreateConnectedSiteTag_sync]
